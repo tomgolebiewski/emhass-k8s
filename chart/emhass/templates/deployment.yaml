@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "emhass.fullname" . }}
+  labels:
+    {{- include "emhass.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "emhass.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "emhass.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "emhass.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}      
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          env:
+            - name: TZ
+              value: {{ .Values.timezone }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.customConfiguration.create }}
+            - name: emhass-config
+              mountPath: /app/config_emhass.yaml
+              subPath: config_emhass.yaml
+              readOnly: true
+            {{- end }}
+            - name: emhass-secrets
+              mountPath: /app/secrets_emhass.yaml
+              subPath: secrets_emhass.yaml
+              readOnly: true
+            - name: emhass-volume
+              mountPath: /app/data
+            {{- if .Values.persistence.additionalMounts }}
+              {{- .Values.persistence.additionalMounts | toYaml | nindent 12 }}
+            {{- end }}
+
+      volumes:
+        {{- if .Values.customConfiguration.create }}
+        - name: emhass-config
+          configMap:
+            name: {{ include "emhass.fullname" . }}
+            items:
+              - key: config_emhass.yaml
+                path: config_emhass.yaml
+        {{- end }}
+        - name: emhass-secrets
+          secret:
+            secretName: {{ .Values.existingSecrets | default (include "emhass.fullname" .) }}
+            items:
+              - key: secrets_emhass.yaml
+                path: secrets_emhass.yaml
+        - name: emhass-volume
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "emhass.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+          {{- if .Values.persistence.additionalVolumes }}
+            {{- .Values.persistence.additionalVolumes | toYaml | nindent 8}}
+          {{- end }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
