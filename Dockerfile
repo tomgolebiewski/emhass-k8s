@@ -1,4 +1,4 @@
-FROM davidusb/emhass-docker-standalone:0.8.5
+FROM docker.io/davidusb/emhass-docker-standalone:0.8.5
 
 #apt package install
 RUN apt-get update
