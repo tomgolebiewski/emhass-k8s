@@ -11,8 +11,8 @@ values:
   gitSha: '{{ .SHA }}'
   image:
     dockerfile: ""
-    repository: davidusb/emhass-docker-standalone
-    tag: 0.8.5
+    repository: ghcr.io/tomgolebiewski/emhass-k8s
+    tag: 08523c3f14edbb2f2ee01d4bec33508c2fdb16bf
   imagePullSecrets: []
   replicas: 1
   resources:
