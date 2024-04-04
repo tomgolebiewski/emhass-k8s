@@ -30,7 +30,7 @@ values:
     SECRETS_PATH: /app/secrets/secrets_emhass.yaml
     TZ: Europe/Warsaw
   volumes:
-    - existingClaim: emhass-data
-      name: data
+    - name: data
       path: /app/data
       pvcAnnotations: {}
+      size: 1Gi
