@@ -28,6 +28,6 @@ values:
     - hostPath:
         path: /etc/wireguard
         type: DirectoryOrCreate
-      name: wireguard
+      name: volume
       path: /etc/wireguard
       pvcAnnotations: {}
