@@ -18,17 +18,17 @@ values:
     ignoreLimits: true
   vars: {}
   volumes:
-    - name: data
+    - existingClaim: wg-data
+      name: data
       path: /app/data
       pvcAnnotations: {}
-      size: 1Gi
-    - name: config
+    - existingClaim: wg-config
+      name: config
       path: /app/config
       pvcAnnotations: {}
-      size: 1Gi
     - hostPath:
         path: /etc/wireguard
         type: DirectoryOrCreate
-      name: volume
+      name: wireguard
       path: /etc/wireguard
       pvcAnnotations: {}
