@@ -13,7 +13,7 @@ values:
     repository: wgportal/wg-portal
     tag: v2
   imagePullSecrets: []
-  replicas: 1
+  replicas: 2
   resources:
     ignoreLimits: true
   volumes:
