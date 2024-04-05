@@ -11,9 +11,9 @@ values:
   gitSha: '{{ .SHA }}'
   image:
     repository: wgportal/wg-portal
-    tag: v2
+    tag: latest
   imagePullSecrets: []
-  replicas: 2
+  replicas: 1
   resources:
     ignoreLimits: true
   volumes:
