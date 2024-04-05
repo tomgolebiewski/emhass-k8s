@@ -31,6 +31,6 @@ values:
     - hostPath:
         path: /etc/wireguard
         type: DirectoryOrCreate
-      name: wireguard
+      name: data
       path: /etc/wireguard
       pvcAnnotations: {}
