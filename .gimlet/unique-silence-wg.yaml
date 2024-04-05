@@ -16,6 +16,7 @@ values:
   replicas: 1
   resources:
     ignoreLimits: true
+  vars: {}
   volumes:
     - name: data
       path: /app/data
