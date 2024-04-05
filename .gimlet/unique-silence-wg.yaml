@@ -18,13 +18,11 @@ values:
     ignoreLimits: true
   vars: {}
   volumes:
-    - existingClaim: wg-data
-      name: data
+    - name: data
       path: /app/data
       pvcAnnotations: {}
       size: 1Gi
-    - existingClaim: wg-config
-      name: config
+    - name: config
       path: /app/config
       pvcAnnotations: {}
       size: 1Gi
