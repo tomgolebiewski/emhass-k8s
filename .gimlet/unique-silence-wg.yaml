@@ -22,10 +22,12 @@ values:
       name: data
       path: /app/data
       pvcAnnotations: {}
+      size: 1Gi
     - existingClaim: wg-config
       name: config
       path: /app/config
       pvcAnnotations: {}
+      size: 1Gi
     - hostPath:
         path: /etc/wireguard
         type: DirectoryOrCreate
