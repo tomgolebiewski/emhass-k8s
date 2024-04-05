@@ -6,13 +6,28 @@ chart:
   name: onechart
   version: 0.64.0
 values:
-  containerPort: 80
+  containerPort: 8888
   gitRepository: tomgolebiewski/emhass-k8s
   gitSha: '{{ .SHA }}'
   image:
-    repository: nginx
-    tag: 1.19.3
+    repository: wgportal/wg-portal
+    tag: v2
   imagePullSecrets: []
   replicas: 1
   resources:
     ignoreLimits: true
+  volumes:
+    - name: data
+      path: /app/data
+      pvcAnnotations: {}
+      size: 1Gi
+    - name: config
+      path: /app/config
+      pvcAnnotations: {}
+      size: 1Gi
+    - hostPath:
+        path: /etc/wireguard
+        type: DirectoryOrCreate
+      name: wg_data
+      path: /etc/wireguard
+      pvcAnnotations: {}
