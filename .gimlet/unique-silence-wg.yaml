@@ -16,6 +16,8 @@ values:
   replicas: 1
   resources:
     ignoreLimits: true
+  podSpec:
+    hostNetwork: true
   vars: {}
   volumes:
     - name: data
