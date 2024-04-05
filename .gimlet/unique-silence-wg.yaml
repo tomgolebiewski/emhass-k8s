@@ -1,4 +1,4 @@
-app: wg
+app: wg-portal
 env: unique-silence
 namespace: default
 chart:
